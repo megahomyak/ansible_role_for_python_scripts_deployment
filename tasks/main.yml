@@ -38,6 +38,8 @@
     name: "{{program_name}}.service"
     state: restarted
   when: systemd_unit_creation_result is changed or files_deploying_result is changed
+  tags:
+    - restart
 
 - name: stop the systemd unit
   ansible.builtin.systemd:
