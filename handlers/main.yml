@@ -3,7 +3,7 @@
   ansible.builtin.systemd:
     daemon-reload: yes
 
-- name: enable and activate the unit
+- name: enable and activate the systemd unit
   ansible.builtin.systemd:
     name: "{{program_name}}.service"
     state: started

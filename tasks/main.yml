@@ -26,16 +26,16 @@
 - name: add a systemd unit
   template:
     src: "{{unit_file_template_name}}"
-    dest: "{{remote_systemd_units_path}}/{{program_name}}.service"
+    dest: "{{remote_systemd_units_path}}/{{systemd_unit_name}}"
     mode: 0644
   notify:
-    - enable and activate the unit
+    - enable and activate the systemd unit
     - reload the systemd configuration files
   register: systemd_unit_creation_result
 
 - name: restart the systemd unit
   ansible.builtin.systemd:
-    name: "{{program_name}}.service"
+    name: "{{systemd_unit_name}}"
     state: restarted
   when: systemd_unit_creation_result is changed or files_deploying_result is changed
   tags:
@@ -43,8 +43,33 @@
 
 - name: stop the systemd unit
   ansible.builtin.systemd:
-    name: "{{program_name}}.service"
+    name: "{{systemd_unit_name}}"
     state: stopped
   tags:
     - stop
+    - never
+
+- name: disable and stop the systemd unit
+  ansible.builtin.systemd:
+    name: "{{systemd_unit_name}}"
+    state: stopped
+    enabled: no
+  tags:
+    - vanish
+    - never
+
+- name: remove the systemd unit
+  ansible.builtin.file:
+    state: absent
+    path: "{{remote_systemd_units_path}}/{{systemd_unit_name}}"
+  tags:
+    - vanish
+    - never
+
+- name: remove the sources directory
+  ansible.builtin.file:
+    state: absent
+    path: "{{program_sources_path_on_the_remote_host}}"
+  tags:
+    - vanish
     - never
