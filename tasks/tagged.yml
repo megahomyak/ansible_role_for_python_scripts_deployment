@@ -1,0 +1,63 @@
+---
+- name: get the status of the systemd unit
+  ansible.builtin.systemd:
+    name: "{{systemd_unit_name}}"
+  register: systemd_unit_status
+  tags:
+    - status
+    - never
+
+- name: print the status of the systemd unit
+  debug: var=systemd_unit_status
+  tags:
+    - status
+    - never
+
+- name: reload the systemd unit
+  ansible.builtin.systemd:
+    name: "{{systemd_unit_name}}"
+    state: reloaded
+  tags:
+    - reload
+    - never
+
+- name: start the systemd unit
+  ansible.builtin.systemd:
+    name: "{{systemd_unit_name}}"
+    state: started
+  tags:
+    - start
+    - never
+
+- name: stop the systemd unit
+  ansible.builtin.systemd:
+    name: "{{systemd_unit_name}}"
+    state: stopped
+  tags:
+    - stop
+    - never
+
+- name: disable and stop the systemd unit
+  ansible.builtin.systemd:
+    name: "{{systemd_unit_name}}"
+    state: stopped
+    enabled: no
+  tags:
+    - vanish
+    - never
+
+- name: remove the systemd unit
+  ansible.builtin.file:
+    state: absent
+    path: "{{remote_systemd_units_path}}/{{systemd_unit_name}}"
+  tags:
+    - vanish
+    - never
+
+- name: remove the sources directory
+  ansible.builtin.file:
+    state: absent
+    path: "{{program_sources_path_on_the_remote_host}}"
+  tags:
+    - vanish
+    - never

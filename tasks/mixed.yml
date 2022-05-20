@@ -1,0 +1,10 @@
+---
+- name: restart the systemd unit
+  ansible.builtin.systemd:
+    name: "{{systemd_unit_name}}"
+    state: restarted
+  when: >
+    systemd_unit_creation_result is undefined
+    or (systemd_unit_creation_result is changed or files_deploying_result is changed)
+  tags:
+    - restart
