@@ -1,0 +1,8 @@
+[Service]
+ExecStart=/bin/sh -c '{{python_name_or_path}} {{entry_point_file_path}}'
+Environment="PYTHONPATH=$PYTHONPATH:{{python_packages_path}}"
+WorkingDirectory={{program_sources_path_on_the_remote_host}}
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
