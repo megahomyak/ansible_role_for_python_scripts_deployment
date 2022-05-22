@@ -1,0 +1,6 @@
+---
+remote_systemd_units_path: /etc/systemd/system
+unit_file_template_name: python_program.service.j2
+python_packages_path: /home/ubuntu/.local/lib/python3.8/site-packages
+python_name_or_path: python3
+pip_name_or_path: python3 -m pip
