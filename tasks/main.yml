@@ -1,8 +1,6 @@
 ---
 - import_tasks: tagged.yml
 
-- import_tasks: mixed.yml
-
 - name: install python and rsync
   ansible.builtin.package:
     name: "{{item}}"
@@ -36,3 +34,5 @@
     - enable and activate the systemd unit
     - reload the systemd configuration files
   register: systemd_unit_creation_result
+
+- import_tasks: mixed.yml
